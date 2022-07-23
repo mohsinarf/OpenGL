@@ -1,0 +1,69 @@
+#include <iostream>
+#include <GL\glew.h>
+#include <GLFW\glfw3.h>
+
+// Windows dimensions
+const GLint WIDTH = 800, HEIGHT = 600;
+
+int main()
+{
+
+	// Setup GLFW
+	if(!glfwInit())
+	{
+		std::cout << "GLFW Initialization Failed." << std::endl;
+		glfwTerminate();
+		return 1;
+	}
+
+	// Setup GLFW Window Properties
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	// No backward compatibility 
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	// Forward Compatibility Enable
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+	// Create OpenGL Window
+	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Main Window", NULL, NULL);
+	if (!window)
+	{
+		std::cout << "Unable to create OpenGLWindow!" << std::endl;
+		glfwTerminate();
+		return 1;
+	}
+
+	// Get FrameBuffer information
+	int bufferWidth, bufferHeight;
+	glfwGetFramebufferSize(window, &bufferWidth, &bufferHeight);
+
+	// Set context for GLFW to Use
+	glfwMakeContextCurrent(window);
+
+	// Enable OpenGL Modern Features
+	glewExperimental = GL_TRUE;
+
+	// Setup GLEW
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "GLEW Initialization Failed!" << std::endl;
+		glfwDestroyWindow(window);
+		glfwTerminate();
+		return 1;
+	}
+
+	glViewport(0, 0, bufferWidth, bufferHeight);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwPollEvents();
+
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwSwapBuffers(window);
+
+	}
+
+	return 0;
+}
